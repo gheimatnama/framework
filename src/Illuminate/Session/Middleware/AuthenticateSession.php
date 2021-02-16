@@ -91,8 +91,6 @@ class AuthenticateSession
     {
         $this->guard()->logoutCurrentDevice();
 
-        $request->session()->flush();
-
         throw new AuthenticationException('Unauthenticated.', [$this->auth->getDefaultDriver()]);
     }
 
