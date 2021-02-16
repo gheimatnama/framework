@@ -22,6 +22,15 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation gives you a complete toolset required to build any application with which you are tasked.
 
+## About this fork
+This is a customized fork for Gheimatnama.
+
+We will keep it up with the main laravel repository, with performance in mind,
+and also some improvements on queues and notifications.
+
+Our plan is mainly reducing the framework overhead, by cutting unused features, and improving the way queues work
+
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is in-depth and complete, making it a breeze to get started learning the framework.
