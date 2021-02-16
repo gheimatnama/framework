@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection as ModelCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Events\NotificationSending;
 use Illuminate\Notifications\Events\NotificationSent;
+use Illuminate\Notifications\Events\NotificationFailed;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Localizable;
@@ -145,10 +146,33 @@ class NotificationSender
             return;
         }
 
-        $response = $this->manager->driver($channel)->send($notifiable, $notification);
+        try {
+            $response = $this->manager->driver($channel)->send($notifiable, $notification);
 
+            $this->events->dispatch(
+                new NotificationSent($notifiable, $notification, $channel, $response)
+            );
+        } catch (\Throwable $throwable) {
+            
+            $this->handleNotificationFailure($notifiable, $notification, $channel, $throwable);
+        }
+    }
+
+    /**
+     * Handles notification's unexpected failure
+     *
+     * @param  mixed  $notifiable
+     * @param  string  $id
+     * @param  mixed  $notification
+     * @param  string  $channel
+     * @param  \Throwable  $throwable
+     * @return void
+     */
+    protected function handleNotificationFailure($notifiable, $notification, $channel, $throwable) {
+
+        // Dispatch notification failure event
         $this->events->dispatch(
-            new NotificationSent($notifiable, $notification, $channel, $response)
+            new NotificationFailed($notifiable, $notification, $channel, $throwable)
         );
     }
 
